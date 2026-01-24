@@ -1,0 +1,27 @@
+{
+  "name": "sp_campaign_daily",
+  "report": {
+    "adProduct": "SPONSORED_PRODUCTS",
+    "reportTypeId": "spCampaigns",
+    "timeUnit": "DAILY",
+    "groupBy": ["campaign"]
+  },
+  "columns": [
+    { "name": "profile_id", "type": "bigint", "null": false },
+
+    { "name": "date", "type": "date", "null": false, "source": "date" },
+    { "name": "campaign_id", "type": "bigint", "null": false, "source": "campaignId" },
+
+    { "name": "impressions", "type": "bigint" },
+    { "name": "clicks", "type": "bigint" },
+    { "name": "cost", "type": "numeric(12,2)" },
+
+    { "name": "raw_run_id", "type": "text", "null": false },
+    { "name": "ingested_at", "type": "timestamptz", "null": false, "default": "now()" }
+  ],
+  "unique": [["profile_id", "date", "campaign_id"]],
+  "indexes": [
+    ["profile_id", "date"],
+    ["campaign_id"]
+  ]
+}

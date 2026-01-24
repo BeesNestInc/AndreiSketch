@@ -1,0 +1,14 @@
+{
+  "name": "amazon-ads-fetch",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "fetch:sp:campaign": "node src/fetch-sp-campaign-report.mjs"
+  },
+  "dependencies": {
+    "axios": "^1.13.2",
+    "dotenv": "^16.4.5",
+    "pg": "^8.17.2"
+  }
+}
