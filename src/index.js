@@ -2,6 +2,7 @@
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import duckdb from 'duckdb';
+import vm from 'node:vm';
 import { format } from '@formkit/tempo';
 
 const fastify = Fastify({
@@ -48,44 +49,81 @@ const initializeDatabase = async () => {
   }
 };
 
-// /api/query エンドポイント
-fastify.post('/api/query', async (request, reply) => {
-  const { sql } = request.body;
-  if (!sql) {
-    return reply.status(400).send({ error: 'SQL query is required.' });
+const executeSql = (code) => {
+  return new Promise((resolve, reject) => {
+    db.all(code, (err, res) => {
+      if (err) {
+        return reject(err);
+      }
+      
+      // BigIntとDateをJSONでシリアライズ可能な形式に変換
+      const processedRes = res.map(row => {
+        const newRow = {};
+        for (const key in row) {
+          const value = row[key];
+          if (typeof value === 'bigint') {
+            newRow[key] = value.toString();
+          } else if (value instanceof Date) {
+            newRow[key] = format(value, 'YYYY-MM-DD HH:mm:ss');
+          } else {
+            newRow[key] = value;
+          }
+        }
+        return newRow;
+      });
+      resolve(processedRes);
+    });
+  });
+};
+
+const executeJsServer = (code) => {
+  const sandbox = {
+    tempo: { format },
+    console: {
+      log: (...args) => fastify.log.info(...args) // サーバーのロガーに出力
+    },
+    // 将来的に、SQL実行結果などを渡す場合はここに注入する
+    // data: previousSqlResult 
+  };
+  
+  // Scriptオブジェクトを作成してコンパイル
+  const script = new vm.Script(code);
+  
+  // サンドボックス内で実行
+  const result = script.runInNewContext(sandbox);
+  
+  // 実行結果がundefinedの場合はnullを返す
+  return result === undefined ? null : result;
+};
+
+
+// /api/execute エンドポイント
+fastify.post('/api/execute', async (request, reply) => {
+  const { language, code } = request.body;
+
+  if (!language || !code) {
+    return reply.status(400).send({ error: '`language` and `code` are required.' });
   }
 
   try {
-    const results = await new Promise((resolve, reject) => {
-      db.all(sql, (err, res) => {
-        if (err) {
-          return reject(err);
-        }
-        
-        // BigIntとDateをJSONでシリアライズ可能な形式に変換
-        const processedRes = res.map(row => {
-          const newRow = {};
-          for (const key in row) {
-            const value = row[key];
-            if (typeof value === 'bigint') {
-              newRow[key] = value.toString();
-            } else if (value instanceof Date) {
-              newRow[key] = format(value, 'YYYY-MM-DD HH:mm:ss');
-            } else {
-              newRow[key] = value;
-            }
-          }
-          return newRow;
-        });
-        resolve(processedRes);
-      });
-    });
+    let results;
+    switch (language) {
+      case 'sql':
+        results = await executeSql(code);
+        break;
+      case 'js-server':
+        results = executeJsServer(code);
+        break;
+      default:
+        return reply.status(400).send({ error: `Unsupported language: ${language}` });
+    }
     reply.send(results);
   } catch (err) {
-    fastify.log.error({ msg: 'Error executing query', sql, err });
-    reply.status(500).send({ error: 'Failed to execute query.', details: err.message });
+    fastify.log.error({ msg: 'Error executing code', language, code, err });
+    reply.status(500).send({ error: `Failed to execute ${language} code.`, details: err.message });
   }
 });
+
 
 // サーバーの起動
 const start = async () => {

@@ -1,14 +1,15 @@
 # フロントエンド仕様
-- フレームワーク: Observable Framework
-- エディタ: CodeMirror (SQL/JS用)
-- 可視化: Observable Plot
-- build: vite
-- apiアクセス: axios
-- 挙動:
-    - エディタで `Ctrl+Enter` を押すとサーバーにコードを送信。
-    - サーバーから返ったJSONを自動的に `display()` し、グラフを再描画する。
--  APIから返された日付文字列を可視化する際も Tempo を使用して整形してください。
-- コード哲学
-    - Svelte 5 の $state, $derived 等の Runes を使用。
-    - Observable Framework の Markdown 内で Svelte コンポーネントをマウントし、リアクティブな SQL Playground を構築。
-    - スタイルは Tailwind CSS (v4等最新) を使用。
+- フレームワーク: Svelte (Vite)
+- UIコンポーネント: Svelte 5
+- 可視化: Observable Plot (ライブラリとして使用)
+- APIアクセス: axios
+
+## 挙動
+- シンプルなテキストエリアと実行ボタンを持つSQLエディタUIを提供する。
+- 実行ボタンのクリックにより、入力されたSQLをバックエンドの`/api/query`へPOSTする。
+- サーバーから返却された結果（JSON）をHTMLのテーブル形式で画面に表示する。
+- API通信時や、クエリ実行に失敗した場合は、エラー内容を画面に表示する。
+
+## コード哲学
+- Svelte 5のRunes (`$state`など) を活用し、リアクティブな状態管理を行う。
+- スタイリングは、フレームワークに依存しないプレーンなCSSを基本とする。
