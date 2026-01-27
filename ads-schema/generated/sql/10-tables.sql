@@ -1,4 +1,4 @@
-create table if not exists "ads"."sp_campaign_daily" (
+create table if not exists "sp_campaign_daily" (
   "profile_id" bigint not null,
   "date" date not null,
   "campaign_id" bigint not null,
@@ -8,7 +8,7 @@ create table if not exists "ads"."sp_campaign_daily" (
   "raw_run_id" text not null,
   "ingested_at" timestamptz not null default now()
 );
-create table if not exists "ads"."sp_search_term_daily" (
+create table if not exists "sp_search_term_daily" (
   "profile_id" bigint not null,
   "date" date not null,
   "campaign_id" bigint not null,

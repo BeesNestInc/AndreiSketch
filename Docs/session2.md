@@ -1,0 +1,3 @@
+オンプレPostgreSQLと連携する、サーバーサイドJS実行型のデータ分析プラットフォームを構築して。
+Python不使用、すべてNode.jsとSQLで完結させること。
+src/にDuckDB+Postgresの計算API、front/svelte/にコードエディタと結果表示を、Tempoを使った日付処理を含めて作成して。

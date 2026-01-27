@@ -1,0 +1,8 @@
+# This file was automatically generated
+name: ads
+type: postgres
+options:
+  database: amazon
+  host: 10.2.254.11
+  port: 5432
+  schema: public

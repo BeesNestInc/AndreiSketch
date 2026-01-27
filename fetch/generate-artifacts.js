@@ -5,8 +5,6 @@ const TABLES_DIR = path.resolve("ads-schema/tables");
 const VIEWS_DIR = path.resolve("ads-schema/views"); // まだ無くてもOK
 const OUT_DIR = path.resolve("ads-schema/generated");
 
-const SCHEMA = "ads"; // 固定でOK（必要なら後で変える）
-
 const q = (ident) => `"${String(ident).replaceAll('"', '""')}"`;
 
 const ensureDir = (p) => fs.mkdirSync(p, { recursive: true });
@@ -66,7 +64,7 @@ const ddlForTable = (t) => {
   const cols = t.columns.map(normalizeColumn);
   const lines = [];
 
-  lines.push(`create table if not exists ${q(SCHEMA)}.${q(t.name)} (`);
+  lines.push(`create table if not exists ${q(t.name)} (`);
 
   const colDefs = cols.map((c) => {
     const parts = [];
@@ -91,7 +89,7 @@ const indexSqlForTable = (t) => {
     const idxName = `${t.name}__uq_${i}`;
     const colsSql = cols.map(q).join(", ");
     lines.push(
-      `create unique index if not exists ${q(idxName)} on ${q(SCHEMA)}.${q(t.name)} (${colsSql});`
+      `create unique index if not exists ${q(idxName)} on ${q(t.name)} (${colsSql});`
     );
   });
 
@@ -100,7 +98,7 @@ const indexSqlForTable = (t) => {
     const idxName = `${t.name}__ix_${i}`;
     const colsSql = cols.map(q).join(", ");
     lines.push(
-      `create index if not exists ${q(idxName)} on ${q(SCHEMA)}.${q(t.name)} (${colsSql});`
+      `create index if not exists ${q(idxName)} on ${q(t.name)} (${colsSql});`
     );
   });
 
@@ -126,7 +124,7 @@ const upsertSqlForTable = (t) => {
 
   return [
     `-- ${t.name}`,
-    `insert into ${q(SCHEMA)}.${q(t.name)} (${insertCols})`,
+    `insert into ${q(t.name)} (${insertCols})`,
     `values (${values})`,
     `on conflict (${conflict}) do update set`,
     `  ${updateCols.join(",\n  ")},`,
@@ -175,9 +173,6 @@ const specs = tableFiles.map((p) => {
 });
 
 // SQL outputs
-let schemaSql = `create schema if not exists ${q(SCHEMA)};\n`;
-fs.writeFileSync(path.join(OUT_DIR, "sql", "00-schema.sql"), schemaSql);
-
 let tablesSql = "";
 let indexesSql = "";
 for (const t of specs) {

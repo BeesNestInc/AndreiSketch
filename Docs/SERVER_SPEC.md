@@ -1,0 +1,18 @@
+# サーバーサイド仕様
+- ランタイム: Node.js (Fastify)
+- DB接続: 
+    - PostgreSQL (オンプレ接続用)
+    - DuckDB (インメモリ計算用)
+- 主要エンドポイント:
+    - POST `/api/query`: 
+        - クライアントからSQLを受け取る。
+        - DuckDBの `postgres_scan` 機能を使ってオンプレPostgresを直接参照し、計算結果をJSONで返す。
+    - POST `/api/execute-js`:
+        - クライアントからJSコード文字列を受け取る。
+        - サーバー側でデータを保持した状態でJSを実行し、結果を返す。
+- 依存ライブラリ: `fastify`, `duckdb`, `pg`
+- 日付処理には @formkit/tempo を使用し、常に Date オブジェクトベースで処理してください。
+- コード哲学
+    - async/await ネイティブなコード。
+    - DuckDB の postgres_scanner を活用し、オンプレDBをロードせず「マウント」してライブクエリを実行。
+    - 日付処理は @formkit/tempo を徹底。

@@ -1,0 +1,29 @@
+{
+  "runId": "20260126T025654Z",
+  "startDate": "2025-12-25",
+  "endDate": "2026-01-25",
+  "reportId": "2c2d1a49-10b1-4429-ae34-a6727e3bb429",
+  "adsBase": "https://advertising-api-fe.amazon.com",
+  "reportTypeId": "spSearchTerm",
+  "timeUnit": "DAILY",
+  "format": "GZIP_JSON",
+  "groupBy": [
+    "searchTerm"
+  ],
+  "columns": [
+    "date",
+    "campaignId",
+    "adGroupId",
+    "keywordId",
+    "matchType",
+    "searchTerm",
+    "impressions",
+    "clicks",
+    "cost"
+  ],
+  "requestPath": "ads-schema/generated/reports/sp_search_term_daily.request.json",
+  "bytes": 39359,
+  "sha256": "7a2da50389e0519658670be22aae52d79db8b4336eae34b0a8545084f9bedc9c",
+  "savedAs": "data/raw/run-20260126T025654Z/sp-campaign_2025-12-25_2026-01-25_cols1_spSearchTerm_DAILY_GZIP_JSON.bin",
+  "savedRequestAs": "data/raw/run-20260126T025654Z/sp-campaign_2025-12-25_2026-01-25_req.json"
+}
