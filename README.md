@@ -1,59 +1,45 @@
-# Hello Framework
+# Andrei Sketch
 
-This is an [Observable Framework](https://observablehq.com/framework/) app. To install the required dependencies, run:
+対話的BIツールです。
 
-```
-npm install
-```
+Jupyter Notebook的な操作で多言語対応たワークベンチです。
 
-Then, to start the local preview server, run:
+現在のところ、
 
-```
-npm run dev
-```
+* SQL
+* server side Javascript
+* front Javascript
 
-Then visit <http://localhost:3000> to preview your app.
+に対応しています。
 
-For more, see <https://observablehq.com/framework/getting-started>.
+## 名称について
 
-## Project structure
+元々、データを集計するためにPostgreSQLにデータを集積していました。
+これを別途集計用データベースに移すことなく、データ集計をし、可視化したいと考えました。
 
-A typical Framework project looks like this:
+そこでまず
 
-```ini
-.
-├─ src
-│  ├─ components
-│  │  └─ timeline.js           # an importable module
-│  ├─ data
-│  │  ├─ launches.csv.js       # a data loader
-│  │  └─ events.json           # a static data file
-│  ├─ example-dashboard.md     # a page
-│  ├─ example-report.md        # another page
-│  └─ index.md                 # the home page
-├─ .gitignore
-├─ observablehq.config.js      # the app config file
-├─ package.json
-└─ README.md
-```
+* SQLを投じて処理をし、そのデータを得ること
+* 得たデータをサーバサイドで集計すること
+* 集計されたものを可視化すること
 
-**`src`** - This is the “source root” — where your source files live. Pages go here. Each page is a Markdown file. Observable Framework uses [file-based routing](https://observablehq.com/framework/project-structure#routing), which means that the name of the file controls where the page is served. You can create as many pages as you like. Use folders to organize your pages.
+という基本仕様を考え、そこで「試行錯誤」するためにJupyter Notebook的な操作を考え、それが共存して実行する環境を作ることにしました。
 
-**`src/index.md`** - This is the home page for your app. You can have as many additional pages as you’d like, but you should always have a home page, too.
+そこで
 
-**`src/data`** - You can put [data loaders](https://observablehq.com/framework/data-loaders) or static data files anywhere in your source root, but we recommend putting them here.
+* SQL
+* server side Javascript
+* front Javascript
 
-**`src/components`** - You can put shared [JavaScript modules](https://observablehq.com/framework/imports) anywhere in your source root, but we recommend putting them here. This helps you pull code out of Markdown files and into JavaScript modules, making it easier to reuse code across pages, write tests and run linters, and even share code with vanilla web applications.
+をまず実行することを思った次第です。
 
-**`observablehq.config.js`** - This is the [app configuration](https://observablehq.com/framework/config) file, such as the pages and sections in the sidebar navigation, and the app’s title.
-
-## Command reference
-
-| Command           | Description                                              |
-| ----------------- | -------------------------------------------------------- |
-| `npm install`            | Install or reinstall dependencies                        |
-| `npm run dev`        | Start local preview server                               |
-| `npm run build`      | Build your static site, generating `./dist`              |
-| `npm run deploy`     | Deploy your app to Observable                            |
-| `npm run clean`      | Clear the local data loader cache                        |
-| `npm run observable` | Run commands like `observable help`                      |
+元々広告システムの一部として書き始めたのですが、これ単独でリリースすることを考えて、名前を作る時に、
+「三位一体的だな」
+「三位一体でググってみるか」
+「また[Wikipedia](https://ja.wikipedia.org/wiki/%E4%B8%89%E4%BD%8D%E4%B8%80%E4%BD%93)だ」
+「絵があるぞ」
+「至聖三者が出て来た」
+「誰の作だ？」
+「Andrei Rublev」
+ということで、この名前となりました。
+これは「[Hieronymus](https://github.com/BeesNestInc/hieronymus)」と同じ過程です。

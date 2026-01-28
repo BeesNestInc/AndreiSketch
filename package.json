@@ -1,8 +1,8 @@
 {
-  "name": "amazon-ads-fetch",
+  "name": "AndreiSketch",
   "version": "0.1.0",
-  "private": true,
   "type": "module",
+	"license": "AGPL-3.0-or-later",
   "scripts": {
     "fetch:sp:campaign": "node fetch/fetch-sp-campaign-report.js",
     "clean": "rimraf Observable/.observablehq/cache",
